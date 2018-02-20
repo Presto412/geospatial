@@ -1,11 +1,12 @@
 import json
+import os
 from pprint import pprint
 
-with open("usa_heartrate_by_county.csv", "r") as f:
+with open(os.path.join("data", "usa_heartrate_by_county.csv"), "r") as f:
     lines = [i.strip().split(',') for i in f.readlines()]
-with open("usa_population_area_by_county.csv", "r") as f:
+with open(os.path.join("data", "usa_population_area_by_county.csv"), "r") as f:
     census_lines = [i.strip().split(',') for i in f.readlines()]
-with open("usa_bordering_states.csv", "r") as f:
+with open(os.path.join("data", "usa_bordering_states.csv"), "r") as f:
     state_lines = [i.strip().split(',') for i in f.readlines()]
 
 for county1 in census_lines:
@@ -19,11 +20,6 @@ states = list(set([i[0] for i in lines]))
 
 bordering_states = {state2: [i.strip() for i in state1[1:-1]]
                     for state2 in states for state1 in state_lines if state1[0] == state2}
-
-# for state1 in state_lines:
-#     for state2 in states:
-#         if state1[0] == state2:
-#             bordering_states.update({state2: [i.strip() for i in state1[1:-1]]})
 
 final_dict = {
     state: {
@@ -39,5 +35,5 @@ final_dict = {
     }
     for state in states
 }
-with open("organized_data.json", "w") as f:
+with open(os.path.join("output", "organized_data.json"), "w") as f:
     json.dump(final_dict, f)
